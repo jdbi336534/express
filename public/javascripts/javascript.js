@@ -13,8 +13,7 @@ window.onload = function() {
     };
     // 连接建立时触发
     ws.onopen = function() {
-        ws.send('_connect,123456465464');
-        console.log('_connect,123456465464')
+        ws.send(JSON.stringify({ id: '1011xx', username: 'jiangdb' }));
     };
     // 连接关闭时触发
     ws.onclose = function() {
@@ -24,4 +23,9 @@ window.onload = function() {
     //     console.log(data);
     //     ws.emit('my other event', { my: 'data' });
     // });
+    setInterval(function() {
+        // console.log('aWss.clients:',aWss.clients);
+        // ws.send('MR.ROBOT12312312313123132');
+    }, 1000);
+
 };
