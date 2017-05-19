@@ -7,7 +7,16 @@
 var app = require('../app');
 var debug = require('debug')('myapp:server');
 var http = require('http');
-
+// https
+var fs = require('fs');
+var https = require('https');
+var privateKey = fs.readFileSync('httpscrt/2_www.eleps.cn.key', 'utf8');
+var certificate = fs.readFileSync('httpscrt/1_www.eleps.cn_bundle.crt', 'utf8');
+var credentials = {
+  key: privateKey,
+  cert: certificate
+};
+var SSLPORT = 3200;
 /**
  * Get port from environment and store in Express.
  */
@@ -20,12 +29,17 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
 server.listen(port);
+httpsServer.listen(SSLPORT, function () {
+  console.log('HTTPS Server is running on: https://localhost:%s', SSLPORT);
+});
+
 server.on('error', onError);
 server.on('listening', onListening);
 
@@ -58,9 +72,9 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === 'string' ?
+    'Pipe ' + port :
+    'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -83,8 +97,8 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  var bind = typeof addr === 'string' ?
+    'pipe ' + addr :
+    'port ' + addr.port;
   debug('Listening on ' + bind);
 }
