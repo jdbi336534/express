@@ -10,7 +10,9 @@ var http = require('http');
 // https
 var fs = require('fs');
 var https = require('https');
+// 私钥
 var privateKey = fs.readFileSync('httpscrt/2_www.eleps.cn.key', 'utf8');
+// 证书
 var certificate = fs.readFileSync('httpscrt/1_www.eleps.cn_bundle.crt', 'utf8');
 var credentials = {
   key: privateKey,
